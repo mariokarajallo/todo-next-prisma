@@ -2,26 +2,29 @@
 
 import { FormEvent, useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
-import * as todosApi from "@/todos/helpers/todo";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import { addTodo, deleteCompletedTodos } from "../actions/todo-actions";
+// import * as todosApi from "@/todos/helpers/todo";
 
 export const NewTodo = () => {
   const [description, setdescription] = useState("");
-  const router = useRouter();
+  //   const router = useRouter();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (description.trim() === "") return;
-    await todosApi.createTodo(description);
+    // await todosApi.createTodo(description);
+    await addTodo(description);
+    // router.refresh();
     setdescription("");
-    router.refresh();
     console.log("Form submitted:", description);
   };
 
-  const deleteCompleted = async () => {
-    await todosApi.deleteCompletedTodos();
-    router.refresh();
-  };
+  //   const deleteCompleted = async () => {
+  //     await todosApi.deleteCompletedTodos();
+  //     router.refresh();
+  //     await deleteCompletedTodos();
+  //   };
 
   return (
     <form onSubmit={onSubmit} className="flex">
@@ -43,7 +46,7 @@ export const NewTodo = () => {
       <span className="flex flex-1"></span>
 
       <button
-        onClick={() => deleteCompleted()}
+        onClick={() => deleteCompletedTodos()}
         type="button"
         className="flex items-center justify-center rounded ml-2 bg-red-400 p-2 text-white hover:bg-red-700 transition-all"
       >

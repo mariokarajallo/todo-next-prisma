@@ -7,6 +7,7 @@ import {
   CiViewList,
 } from "react-icons/ci";
 import { SidebarItem } from "@/components";
+import { IoCode } from "react-icons/io5";
 
 const menuItems = [
   {
@@ -23,6 +24,16 @@ const menuItems = [
     icon: <CiServer />,
     title: "Server Actions",
     path: "/dashboard/server-todos",
+  },
+  {
+    icon: <IoCode />,
+    title: "Cookiess",
+    path: "/dashboard/cookies",
+  },
+  {
+    icon: <CiViewList />,
+    title: "Products",
+    path: "/dashboard/products",
   },
 ];
 

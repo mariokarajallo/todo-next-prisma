@@ -1,3 +1,4 @@
+import { getUserSessionServer } from "@/auth/actions/auth-actions";
 import prisma from "@/lib/prisma";
 import { NextResponse, NextRequest } from "next/server";
 import * as yup from "yup";
@@ -38,6 +39,14 @@ const postSchema = yup.object({
 });
 
 export async function POST(request: Request) {
+  const user = await getUserSessionServer();
+  if (!user) {
+    return NextResponse.json(
+      { error: "Usuario no autenticado" },
+      { status: 401 }
+    );
+  }
+
   try {
     // Valida y extrae los datos del cuerpo de la solicitud según el esquema definido
     const { complete, description } = await postSchema.validate(
@@ -49,6 +58,7 @@ export async function POST(request: Request) {
       data: {
         description,
         complete,
+        userId: user.id,
       },
     });
 
@@ -61,13 +71,21 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const user = await getUserSessionServer();
+  if (!user) {
+    return NextResponse.json(
+      { error: "Usuario no autenticado" },
+      { status: 401 }
+    );
+  }
 
   try {
-    await prisma.todo.deleteMany({where: {complete: true}});
+    await prisma.todo.deleteMany({
+      where: { complete: true, userId: user.id },
+    });
     // Devuelve una respuesta exitosa con un mensaje
     return NextResponse.json({ message: "Todos Completados borrados" });
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 });
   }
-
 }
